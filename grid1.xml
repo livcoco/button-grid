@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<frame>
+  <info>
+    <!-- `deco` is future feature item-->
+    <deco ontop='t' frame='t' stick='f' />
+
+    <!-- Each <code ... /> entry defines one or more simple text
+         substitution macros.  Each `%#` within a macro is replaced
+         with an automatically ascending counter value.  Note, button
+         colors are future feature items. -->
+    <code u='Bu%#' v='Val%#' />
+    <code b='blue' />
+    <code c='cyan' g='green' />
+    <code p='pink' r='red' w='white' />
+  </info>
+  
+  <!-- Each <row> entry defines a row of buttons.  Each <elt ... />
+       entry in a row defines one button by specifying a label, a
+       color, and a value to send as the result when button is
+       clicked.  Each value in an element can be a quoted text string
+       or (also in quotes) a % sign followed by a macro name.  Any row
+       with fewer elements than the longest row is right-filled with
+       empty space. -->
+  <row>
+    <elt l='%u' c='%b' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%g' v='%v' />
+    <elt l='%u' c='%p' v='%v' />
+  </row>
+
+  <row>
+    <elt l='%u' c='%g' v='%v' />
+    <elt l='%u' c='%p' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%g' v='%v' />
+  </row>
+ 
+  <row>
+    <elt l='%u' c='%g' v='%v' />
+    <elt l='%u' c='%p' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%g' v='%v' />
+  </row>
+
+  <row>
+    <elt l='%u' c='%r' v='%v' />
+    <elt l='%u' c='%w' v='%v' />
+    <elt l='%u' c='%b' v='%v' />
+    <elt l='%u' c='%r' v='%v' />
+  </row>
+  <row>
+    <elt l='%u' c='%w' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%g' v='%v' />
+    <elt l='%u' c='%p' v='%v' />
+  </row>
+
+  <!-- New macro bodies can be defined as needed.  The counter for a
+       macro is zeroed whenever the macro is defined. -->
+  <info>  <code u='H# %#' />
+  </info>
+
+  <row>
+    <elt l='%u' c='%b' v='%v' />
+    <elt l='%u' c='%p' v='%v' />
+    <elt l='%u' c='%r' v='%v' />
+    <elt l='%u' c='%w' v='%v' />
+  </row>
+  
+  <row>
+    <elt l='%u' c='%g' v='%v' />
+    <elt l='%u' c='%p' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%g' v='%v' />
+  </row>
+
+  <row>
+    <elt l='%u' c='%b' v='%v' />
+    <elt l='%u' c='%p' v='%v' />
+    <elt l='%u' c='%r' v='%v' />
+    <elt l='%u' c='%w' v='%v' />
+  </row>
+  
+  <row>
+    <elt l='%u' c='%g' v='%v' />
+    <elt l='%u' c='%p' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%g' v='%v' />
+  </row>
+
+  <info>  <code v='Wave %#' />
+  </info>
+
+  <row>
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%g' v='%v' />
+    <elt l='%u' c='%g' v='%v' />
+    <elt l='%u' c='%p' v='%v' />
+  </row>
+
+  <row>
+    <elt l='%u' c='%b' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%r' v='%v' />
+    <elt l='%u' c='%w' v='%v' />
+  </row>
+  
+  <row>
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%g' v='%v' />
+    <elt l='%u' c='%g' v='%v' />
+    <elt l='%u' c='%p' v='%v' />
+  </row>
+
+  <row>
+    <elt l='%u' c='%b' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%r' v='%v' />
+    <elt l='%u' c='%w' v='%v' />
+  </row>
+  
+  <row>
+    <elt l='%u' c='%b' v='%v' />
+    <elt l='%u' c='%p' v='%v' />
+    <elt l='%u' c='%r' v='%v' />
+    <elt l='%u' c='%w' v='%v' />
+  </row>
+  
+  <row>
+    <elt l='%u' c='%g' v='%v' />
+    <elt l='%u' c='%p' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%g' v='%v' />
+  </row>
+
+</frame>
