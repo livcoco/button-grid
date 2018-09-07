@@ -31,20 +31,25 @@ class Test(QDialog):
             background-color: palegreen;
 } """)
 
-        # Create button
-        btn1 = QPushButton('Click Me')
-        btn1.setProperty('Rank', 1)
-        btn1.setObjectName('StyledButton')
-        btn1.clicked.connect(lambda: self.toggle(btn1))
-        layout.addWidget(btn1)
+        b1 = self.makeButton('Click Me', 1, layout)
+        b2 = self.makeButton('Not me!',  2, layout)
+        b3 = self.makeButton('Etc etc',  3, layout)
 
-    def toggle(self, widget):
+    def makeButton(self, txt, dat, lout):    # Create fine button
+        B = QPushButton(txt)
+        B.setProperty('Rank', dat)
+        B.setObjectName('ButtonButton')
+        B.clicked.connect(lambda: self.callback(B))
+        lout.addWidget(B)
+
+    def callback(self, widget):
         # Query the attribute
-        isTest = widget.property('Test') #.toBool()
+        isTest = widget.property('Test')
         widget.setProperty('Test', not isTest)
-
         # Update the style
         widget.setStyle(widget.style())
+        # Tell about it
+        print ('B r={} {}'.format(widget.property('Rank'),widget.text()))
 
 if __name__ == '__main__':
     app = QApplication([])
