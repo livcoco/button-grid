@@ -3,7 +3,7 @@
 # -- attempt to color buttons individually
 # - jiw -  2 Sept 2018
 
-import gi
+#import gi
 from PyQt5.QtWidgets import QWidget, QPushButton, QApplication
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QColor
@@ -18,7 +18,7 @@ def bgBC():  # bgBC: boxgrid Button Callback handler
     print ('bgBC: txt@x,y = {}@{},{}'.format(sender.txt,sender.x,sender.y))
    
 class xybutton(QPushButton):
-    perx, pery = 50, 40
+    perx, pery = 45, 45
     
     def __init__(self, labl='B', par=None, x=0, y=0, t='t'):
         super(QPushButton, self).__init__(parent=par)
@@ -28,33 +28,37 @@ class xybutton(QPushButton):
         self.move(x*self.perx, y*self.pery)
         self.x, self.y, self.txt = x, y, t
 
-    def colorStyle(borderCol, backCol):
-        self.setStyleSheet('xybutton { border: 12px {};  background-color: {} }'.format(borderCol, backCol))
+#    def colorStyle(self, borderCol, backCol):
+        #self.setStyleSheet('QPushButton#xybutton \{ border: 12px {};  background-color: {} \}'.format(borderCol, backCol))
+#        self.setStyleSheet('QPushButton#xybutton { border: 12px red;  background-color: green }')
 
 app = QApplication(['hey'])
 W = QWidget()
 W.setWindowTitle('qt-color-try')
-palette = W.palette()
-role = W.backgroundRole() # for background color
-palette.setColor(role, QColor('green'))
-W.setPalette(palette)
-W.setAutoFillBackground(True)
 
 hix, hiy = 7, 11
 wide, high = hix*xybutton.perx, hiy*xybutton.pery
 atx, aty = 1060, 380
 W.resize(wide, high)
 W.move(atx, aty)
+#W.setStyleSheet('QPushButton#xybutton { border: 12px red;  background-color: green }')
+palette = W.palette()
+role = W.backgroundRole() # for background color
+palette.setColor(role, QColor('green'))
+W.setPalette(palette)
 
 for k in range(17):
     x, y, l = randint(0,hix-1), randint(0,hiy-1), 'B{}'.format(k)
     B = xybutton(l, W, x, y, l)
+    cbord = cback = colors[randint(0,len(colors)-1)]
+    while cbord==cback:
+        cback = colors[randint(0,len(colors)-1)]
+    #B.colorStyle(QColor(cbord), QColor(cback))
+    role = B.backgroundRole() # for background color
     palette = B.palette()
-    role = B.backgroundRole()
-    palette.setColor(role, QColor(colors[randint(0,len(colors)-1)]))
+    palette.setColor(role, QColor(cback))
     B.setPalette(palette)
-    B.setAutoFillBackground(True)
-    print ('Placed button {} at {},{} : {}'.format(k, x, y, B.txt))
+    print ('Placed button {:2} at {:2},{:<2} with colors {:>5}, {}'.format(k, x, y, cbord, cback))
 
 W.show()                        # Show the widget
 exit(app.exec_())               # Run the event loop until window closes
