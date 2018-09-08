@@ -21,31 +21,45 @@ class Test(QDialog):
         #   padding: 2px;
         #   border-style: inset/outset;
         self.setStyleSheet("""
-          QPushButton {
-            color: blue;   font: bold 49px;
-            padding: 17px;  border: 29px solid lawngreen;
-            background-color: lawngreen;
-          }
-          QPushButton:pressed {
-            color: red;
-            background-color: palegreen;
-} """)
+        QPushButton {
+         color: blue;   font: bold 49px;
+         padding: 17px;  border: 29px solid lawngreen;
+         background-color: lawngreen;
+        }
+        QPushButton:pressed {
+         color: violet;
+         background-color: palegreen;
+        }
+        QPushButton#cat1:pressed {
+         color: white;
+         background-color: palegreen;
+        }
+        QPushButton#cat2:pressed {
+         color: pink;
+         background-color: palegreen;
+        }
+        QPushButton#cat3 {
+         color: cyan;
+         background-color: green;
+        }
+        QPushButton#cat3:pressed {
+         color: cyan;
+         background-color: peach;
+        }
+        """)
 
-        b1 = self.makeButton('Click Me', 1, layout)
-        b2 = self.makeButton('Not me!',  2, layout)
-        b3 = self.makeButton('Etc etc',  3, layout)
+        b1 = self.makeButton('cat1', 'Click Me', 1, layout)
+        b2 = self.makeButton('cat2', 'Not me!',  2, layout)
+        b3 = self.makeButton('cat3', 'Etc etc',  3, layout)
 
-    def makeButton(self, txt, dat, lout):    # Create fine button
+    def makeButton(self, codename, txt, dat, lout):   # Create fine button
         B = QPushButton(txt)
         B.setProperty('Rank', dat)
-        B.setObjectName('ButtonButton')
+        B.setObjectName(codename)
         B.clicked.connect(lambda: self.callback(B))
         lout.addWidget(B)
 
     def callback(self, widget):
-        # Query the attribute
-        isTest = widget.property('Test')
-        widget.setProperty('Test', not isTest)
         # Update the style
         #widget.setStyle(widget.style())
         # Tell about it

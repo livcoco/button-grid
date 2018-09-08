@@ -11,7 +11,7 @@
     <code u='Bu%#' v='Val%#' />
     <code b='blue' />
     <code c='cyan' g='green' />
-    <code p='pink' r='red' w='white' />
+    <code p='pink' r='red' w='white' />    
   </info>
   
   <!-- Each <row> entry defines a row of buttons.  Each <elt ... />
@@ -21,116 +21,120 @@
        or (also in quotes) a % sign followed by a macro name.  Any row
        with fewer elements than the longest row is right-filled with
        empty space. -->
+  <info><code c='cat%#' /></info>
   <row>
-    <elt l='%u' c='%b' v='%v' />
     <elt l='%u' c='%c' v='%v' />
-    <elt l='%u' c='%g' v='%v' />
-    <elt l='%u' c='%p' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
   </row>
-
+  
+  <info><code c='cat%#' /></info>
   <row>
-    <elt l='%u' c='%g' v='%v' />
-    <elt l='%u' c='%p' v='%v' />
     <elt l='%u' c='%c' v='%v' />
-    <elt l='%u' c='%g' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
   </row>
  
+  <!-- New macro bodies can be defined when and as needed.  The
+       counter for a macro is zeroed whenever the macro is defined. -->
+  <info><code u='BB%#' v='vval%#' /></info>
+  <info><code c='cat%#' /></info>
   <row>
-    <elt l='%u' c='%g' v='%v' />
-    <elt l='%u' c='%p' v='%v' />
     <elt l='%u' c='%c' v='%v' />
-    <elt l='%u' c='%g' v='%v' />
-  </row>
-
-  <row>
-    <elt l='%u' c='%r' v='%v' />
-    <elt l='%u' c='%w' v='%v' />
-    <elt l='%u' c='%b' v='%v' />
-    <elt l='%u' c='%r' v='%v' />
-  </row>
-  <row>
-    <elt l='%u' c='%w' v='%v' />
     <elt l='%u' c='%c' v='%v' />
-    <elt l='%u' c='%g' v='%v' />
-    <elt l='%u' c='%p' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
   </row>
-
-  <!-- New macro bodies can be defined as needed.  The counter for a
-       macro is zeroed whenever the macro is defined. -->
-  <info>  <code u='H# %#' />
-  </info>
-
+  <info><code c='cat%#' /></info>
   <row>
-    <elt l='%u' c='%b' v='%v' />
-    <elt l='%u' c='%p' v='%v' />
-    <elt l='%u' c='%r' v='%v' />
-    <elt l='%u' c='%w' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+  </row>
+  <info><code c='cat%#' /></info>
+  <row>
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+  </row>
+  <info><code u='H# %#' /></info>
+  <info><code c='cat%#' /></info>
+  <row>
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
   </row>
   
+  <info><code c='cat%#' /></info>
   <row>
-    <elt l='%u' c='%g' v='%v' />
-    <elt l='%u' c='%p' v='%v' />
     <elt l='%u' c='%c' v='%v' />
-    <elt l='%u' c='%g' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
   </row>
 
+  <info><code c='cat%#' /></info>
   <row>
-    <elt l='%u' c='%b' v='%v' />
-    <elt l='%u' c='%p' v='%v' />
-    <elt l='%u' c='%r' v='%v' />
-    <elt l='%u' c='%w' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
   </row>
   
+  <info><code c='cat%#' /></info>
   <row>
-    <elt l='%u' c='%g' v='%v' />
-    <elt l='%u' c='%p' v='%v' />
     <elt l='%u' c='%c' v='%v' />
-    <elt l='%u' c='%g' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
   </row>
+  <info><code v='Wave %#' /></info>
 
-  <info>  <code v='Wave %#' />
-  </info>
-
+  <info><code c='cat%#' /></info>
   <row>
     <elt l='%u' c='%c' v='%v' />
-    <elt l='%u' c='%g' v='%v' />
-    <elt l='%u' c='%g' v='%v' />
-    <elt l='%u' c='%p' v='%v' />
-  </row>
-
-  <row>
-    <elt l='%u' c='%b' v='%v' />
     <elt l='%u' c='%c' v='%v' />
-    <elt l='%u' c='%r' v='%v' />
-    <elt l='%u' c='%w' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
   </row>
-  
+  <info><code c='cat%#' /></info>
   <row>
     <elt l='%u' c='%c' v='%v' />
-    <elt l='%u' c='%g' v='%v' />
-    <elt l='%u' c='%g' v='%v' />
-    <elt l='%u' c='%p' v='%v' />
-  </row>
-
-  <row>
-    <elt l='%u' c='%b' v='%v' />
     <elt l='%u' c='%c' v='%v' />
-    <elt l='%u' c='%r' v='%v' />
-    <elt l='%u' c='%w' v='%v' />
-  </row>
-  
-  <row>
-    <elt l='%u' c='%b' v='%v' />
-    <elt l='%u' c='%p' v='%v' />
-    <elt l='%u' c='%r' v='%v' />
-    <elt l='%u' c='%w' v='%v' />
-  </row>
-  
-  <row>
-    <elt l='%u' c='%g' v='%v' />
-    <elt l='%u' c='%p' v='%v' />
     <elt l='%u' c='%c' v='%v' />
-    <elt l='%u' c='%g' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+  </row>  
+  <info><code c='cat%#' /></info>
+  <row>
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
   </row>
-
+  <info><code c='cat%#' /></info>
+  <row>
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+  </row>  
+  <info><code c='cat%#' /></info>
+  <row>
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+  </row>  
+  <info><code c='cat%#' /></info>
+  <row>
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+    <elt l='%u' c='%c' v='%v' />
+  </row>
 </frame>

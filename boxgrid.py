@@ -2,6 +2,14 @@
 # Re: Make a grid of message buttons
 # - jiw -  1 Sept 2018
 
+# Note, make a qt5 version of this, with CSS code built up based on
+# colors etc specified in XML file.  The initial section of that file
+# will define half a dozen or so button specs.  Each spec can include
+# a button-type codename; text color and its font options (eg bold or
+# size); and background color of content area when pressed and when
+# not pressed.  Then in the <elt> entries allow l for label, c for
+# button-type codename, and v for value to send.
+
 import sys
 import gi
 gi.require_version('Gtk', '3.0')
