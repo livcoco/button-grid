@@ -45,7 +45,7 @@ from re import sub, search
 # For example, if m='a@#b@#c@#d', processing 'e@m%f g@m%h' produces
 # 'ea0b1c2df ga3b4c5dh'.
 
-# Macro expansions can be nested; for example, <code a='m@c%n@b%o'
+# Macro expansions can be nested; for example, <macro a='m@c%n@b%o'
 # b='@d%' c='f@d%g' d='5'/> <elt id='p@a%q'/> first expands 'p@a%q' to
 # 'pm@c%n@b%oq', then successively to 'pmf@d%gn@b%oq', 'pmf5gn@b%oq',
 # 'pmf5gn@d%oq', and 'pmf5gn5oq'.  Note, processing is left to right;
@@ -57,13 +57,13 @@ from re import sub, search
 # 'aa@bb%gg@hh%tt@kk%cc@tt%dd@bb%ee' also is provided, or the user can
 # provide a string as command line input.
 
-# Macros for the boxgrid program are defined within <code ... /> lines
+# Macros for the boxgrid program are defined within <macro ... /> lines
 # in an XML file.  Macro substitution in boxgrid occurs when @x%
 # appears in a right-hand-side text string.
 
 # In boxgrid usage, macros can be defined or redefined when needed.
 # For example, if you want to define elements rowwise, you could write
-# <code c='@#'/> before each row's series of elements, and within each
+# <macro c='@#'/> before each row's series of elements, and within each
 # <elt> line, write col='@c'.
 
 def macroSubst(tin, recot, recon):
@@ -84,8 +84,8 @@ def macroSubst(tin, recot, recon):
             if opcode=='?':
                 LH = LH + headpt
                 RH = tailpt
-                recot.pop(mname) # Undefine specified macro
-                recon.pop(mname)
+                recot.pop(mname, None) # Undefine specified macro
+                recon.pop(mname, None)
             elif mname in recot:
                 mBody = recot[mname]
                 mCounter = recon[mname]

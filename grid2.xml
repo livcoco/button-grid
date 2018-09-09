@@ -3,7 +3,7 @@
   <!-- `deco` is future feature item-->
   <deco ontop='t' frame='t' stick='f' />
 
-  <!-- Each <cat ... /> entry defines a category of buttons.  Various
+  <!-- Each <style ... /> entry defines a category of buttons.  Various
        attributes can be specified, via keys as follows: background
        color, bc; background color when pressed, bp; text color and
        options, tc; text color and options when pressed, tp; category
@@ -11,69 +11,69 @@
        quoted values may contain macro references, described below.
 
        Note, for any given id, only its last-processed definition has
-       effect.  For example, if you define a category four times with
-       id='m4', only the last definition gets used.  Default values
+       effect.  For example, if you define the same category six
+       times, only the last definition gets used.  Default values
        apply when attributes are left unspecified.  The default values
-       are: <cat id='cat0' tc='white' tp='red' bc='Chocolate'
-       bp='Bisque' mh='44' mw='44' />
-  -->
-  <cat id='cat0' tc='white' tp='red'   bc='Chocolate' bp='Bisque' />
-  <cat id='cat1' tc='white' tp='red'   bc='darkgreen' bp='Aquamarine' />
-  <cat id='cat2' tc='white' tp='red'   bc='darkblue'  bp='cyan'   />
-  <cat id='cat3' tc='black' tp='black' bc='Crimson'   bp='beige'  />
+       are: <style id='cat0' tc='white' tp='red' bc='Chocolate'
+       bp='Bisque' mh='44' mw='44' /> -->
+  <style id='cat0' tc='white' tp='red'   bc='Chocolate' bp='Bisque' />
+  <style id='cat1' tc='white' tp='red'   bc='darkgreen' bp='Aquamarine' />
+  <style id='cat2' tc='white' tp='red'   bc='darkblue'  bp='cyan'   />
+  <style id='cat3' tc='black' tp='black' bc='Crimson'   bp='beige'  />
 
-  <!-- Macros: Each <code ... /> entry defines one or more simple text
+  <!-- Macros: Each <macro ... /> entry defines one or more simple text
        substitution macros.  Macro substitution occurs when @x% (where
        x is a macro name) appears in a text string.  Note, each macro
        has an associated counter that is zeroed whenever the macro is
        defined and increases when substituted via `@x^`, but not when
        substituted via `@x#`.  Macros can be defined or redefined when
        needed.  For more macro details and operations, please see
-       comments within program macro-test.py.
+       comments within module macroSubst.py.
   
-       Elt lines: Each <elt ... /> entry defines one button by
+       Item lines: Each <item ... /> entry defines one button by
        specifying a label (via l=...); a button category id (i=...); a
        row number (r=...); a column number (c=...); and a data value
        to send as the result when button is clicked (v=...).  Each of
-       the '...'  items indicated above must appear in quotes.  An
-       item can be a verbatim text string or can be text with macro
-       references like %x% where x is a macro name.
+       the '...'  element values indicated above must appear in
+       quotes.  Each value can be a verbatim text string or can be
+       text with macro references like %x% where x is a macro name.
+       
+       The elements of a given <item ... /> entry may process out of
+       order; don't use macros that depend on element order.
   -->
-  
-  <code rr='0'  cc='0'/>
   <!-- Define macros to gen i, l, r, c, d (id, label, row, col, data) -->
-  <code rr='0'  cc='0' v='0'/>
-  <code i='cat@cc#' c='@cc^'  r='0' ll='Bu' li='@u^' d='Val'/>
+  <macro rr='0'  cc='0'  co='0'  v='0'  vv='100'/>
   
-  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
-  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
-  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
-  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
-  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
-  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
+  <macro id='cat@cc^'  c='@co^'  r='0' ll='Bu' u='10' d='Val'/>  
+  <item  i='@id%' l='@ll%@u^' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%@u^' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%@u^' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%@u^' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%@u^' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%@u^' r='@r^' c='@c%' v='@vv^' />
     
-  <code id='cat@cc#'  c='@cc^'  r='0'  ll='Bu'/>
-  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
-  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
-  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
-  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
-  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
-  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
+  <macro id='cat@cc^'  c='@co^'  r='0'  ll='Vu@@x?v^'/>
+  <item  i='@id%' l='@ll%a@u^' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%b@u^' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%c@u^' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%d@u^' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%e@u^' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%f@u^' r='@r^' c='@c%' v='@vv^' />
   
-  <code id='cat@cc#'  c='@cc^'  r='0'  ll='Bu'  d='Wave'/>
-  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
-  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
-  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
-  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
-  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
-  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
+  <macro id='cat@cc^'  c='@co^'  r='0'  ll='Tu'  d='Wave'/>
+  <item  i='@id%' l='@ll%@u^' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%@u^' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%@u^' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%@u^' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%@u^' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%@u^' r='@r^' c='@c%' v='@vv^' />
 
-  <code id='cat@cc#'  c='@cc^'  r='0'  ll='H#' d='Wawa' />
-  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
-  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
-  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
-  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
-  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
-  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
+  <macro id='cat@cc^'  c='@co^'  r='0'  ll='H#' d='Wawa' />
+  <item  i='@id%' l='@ll%@u^' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%@u^' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%@u^' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%@u^' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%@u^' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%@u^' r='@r^' c='@c%' v='@vv^' />
 
 </frame>

@@ -10,8 +10,8 @@ from PyQt5.QtWidgets import QVBoxLayout, QDialog, QWidget, QPushButton, QApplica
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QColor
 
-#from re import sub, search
-import macroSubst
+from re import search
+from macroSubst import macroSubst
 from xml.etree import ElementTree
 
 class xybutton(QPushButton):
@@ -23,7 +23,7 @@ class xybutton(QPushButton):
         self.setObjectName(codename) # Set kind of style to use
         self.setText(labl)           # Set button's label
         self.clicked.connect(xyBcallback) # Callback handler
-        self.resize(self.bux, self.buy)   # Button size
+        self.setMinimumSize(self.bux, self.buy)   # Button min size
         self.move(x*self.perx, y*self.pery) # Button location
         self.x, self.y, self.dat = x, y, dat
 
@@ -36,62 +36,34 @@ def ErrorExit(msg, fname):
     sys.stderr.write('\n*** {} {} ***\n'.format(msg, fname))
     sys.exit(0)
 
-def macroSubst(tin, recot, recon):
-    #print 'mS: tin={}, recot={}'.format(tin,recot)
-    lup=0
-    tot = tin
-    while True:                 # Expand macro texts
-        lup+=1
-        if lup>14: sys.exit()
-        s = search(r'%\w%+', tot)
-        if s:
-            mname = tot[1+s.start():s.end()-1]
-            #print 's:', s.start(), s.end(), tot, mname, recot[mname], recon[mname]
-            if mname in recot:
-                mbody = recot[mname]
-                # Expand macro counter(s) in body of macro
-                gotCounter = False
-                while mbody.find('%#') > -1:
-                    gotCounter = True
-                    mbody = sub('%#', str(recon[mname]), mbody)
-                if gotCounter:
-                    recon[mname] += 1 # Increase counter
-                    #print 'Exp. tin={} to tot={} and cv {}-1'.format(tin, tot, recon[mname])
-                # Put expanded macro text into tin
-                tot = tot[:s.start()]+mbody+tot[s.end():]
-            else:
-                break
-        else:
-            break
-    #print ' tot: {}'.format(tot)
-    return tot
-
-
 def makeGrid(etree):
     at = ''                     # set default for at
     recot = {}
     recon = {}
     for item in etree.getroot():
-        if shoInput>0:
+        if shoInput>1:
             print (item.tag, item.attrib, len(item), item.keys())
 	if item.tag == 'deco':
             pass        # future: frame/ontop/stick
-        elif item.tag=='code':
+        elif item.tag=='macro':
             for k in item.keys():
-                recot[k] = item.get(k)
-                recon[k] = 0
-        elif item.tag=='cat':
+                recot[k] = macroSubst(item.get(k), recot, recon)
+                s = search(r' *(\d+)', recot[k])                
+                recon[k] = int(s.expand(r'\1')) if s else 0
+                if shoInput>0:
+                    print ('macro {}: {}  {}'.format(k, recot[k], recon[k]))
+        elif item.tag=='style':
             pass        # future:
-        elif item.tag=='elt':
+        elif item.tag=='item':
             clv = dict(item.items())
             for term in clv.keys():
                 toft = clv[term] # Get text of term
                 clv[term] = macroSubst(toft, recot, recon)
-            if shoInput>1:
+            if shoInput>0:
                 print ('{} {}'.format(item.tag, clv.items()))
-                # Make button with labl l, codename c, data v.
-                l = clv.get('l', '?')
-                B = xybutton(l, W, clv['i'], int(clv['c']), int(clv['r']), clv['v'])
+            # Make button with labl l, codename c, data v.
+            l = clv.get('l', '?')
+            B = xybutton(l, W, clv['i'], int(clv['c']), int(clv['r']), clv['v'])
 
 # --------------------------- main -------------------------------
 # Get params: (1) output-options number, (2) name of grid XML file
@@ -113,7 +85,7 @@ W = QWidget()
 W.setWindowTitle('qt-color-try')
 hix, hiy = 4, 15                # !! Should get hix, hiy from XML data
 wide, high = hix*xybutton.perx, hiy*xybutton.pery
-W.resize(wide, high)
+W.setMinimumSize(wide, high)
 atx, aty = 1060, 380
 W.move(atx, aty)
 # Set main window background color etc
