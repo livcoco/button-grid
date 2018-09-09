@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<frame>
+  <!-- `deco` is future feature item-->
+  <deco ontop='t' frame='t' stick='f' />
+
+  <!-- Each <cat ... /> entry defines a category of buttons.  Various
+       attributes can be specified, via keys as follows: background
+       color, bc; background color when pressed, bp; text color and
+       options, tc; text color and options when pressed, tp; category
+       name, id; button min height, mh; button min width, mw.  Note,
+       quoted values may contain macro references, described below.
+
+       Note, for any given id, only its last-processed definition has
+       effect.  For example, if you define a category four times with
+       id='m4', only the last definition gets used.  Default values
+       apply when attributes are left unspecified.  The default values
+       are: <cat id='cat0' tc='white' tp='red' bc='Chocolate'
+       bp='Bisque' mh='44' mw='44' />
+  -->
+  <cat id='cat0' tc='white' tp='red'   bc='Chocolate' bp='Bisque' />
+  <cat id='cat1' tc='white' tp='red'   bc='darkgreen' bp='Aquamarine' />
+  <cat id='cat2' tc='white' tp='red'   bc='darkblue'  bp='cyan'   />
+  <cat id='cat3' tc='black' tp='black' bc='Crimson'   bp='beige'  />
+
+  <!-- Macros: Each <code ... /> entry defines one or more simple text
+       substitution macros.  Macro substitution occurs when @x% (where
+       x is a macro name) appears in a text string.  Note, each macro
+       has an associated counter that is zeroed whenever the macro is
+       defined and increases when substituted via `@x^`, but not when
+       substituted via `@x#`.  Macros can be defined or redefined when
+       needed.  For more macro details and operations, please see
+       comments within program macro-test.py.
+  
+       Elt lines: Each <elt ... /> entry defines one button by
+       specifying a label (via l=...); a button category id (i=...); a
+       row number (r=...); a column number (c=...); and a data value
+       to send as the result when button is clicked (v=...).  Each of
+       the '...'  items indicated above must appear in quotes.  An
+       item can be a verbatim text string or can be text with macro
+       references like %x% where x is a macro name.
+  -->
+  
+  <code rr='0'  cc='0'/>
+  <!-- Define macros to gen i, l, r, c, d (id, label, row, col, data) -->
+  <code rr='0'  cc='0' v='0'/>
+  <code i='cat@cc#' c='@cc^'  r='0' ll='Bu' li='@u^' d='Val'/>
+  
+  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
+  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
+  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
+  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
+  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
+  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
+    
+  <code id='cat@cc#'  c='@cc^'  r='0'  ll='Bu'/>
+  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
+  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
+  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
+  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
+  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
+  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
+  
+  <code id='cat@cc#'  c='@cc^'  r='0'  ll='Bu'  d='Wave'/>
+  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
+  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
+  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
+  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
+  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
+  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
+
+  <code id='cat@cc#'  c='@cc^'  r='0'  ll='H#' d='Wawa' />
+  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
+  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
+  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
+  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
+  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
+  <elt  i='@i%' l='@ll%@u^' r='@r^' c='@c%' v='@v%@v^' />
+
+</frame>

@@ -2,20 +2,16 @@
 # Re: Make a grid of message buttons
 # - jiw -  1 Sept 2018
 
-# Note, make a qt5 version of this, with CSS code built up based on
-# colors etc specified in XML file.  The initial section of that file
-# will define half a dozen or so button specs.  Each spec can include
-# a button-type codename; text color and its font options (eg bold or
-# size); and background color of content area when pressed and when
-# not pressed.  Then in the <elt> entries allow l for label, c for
-# button-type codename, and v for value to send.
+# 2nd qt5 version of boxgrid; builds CSS code based on specs in XML
+# file, instead of coding it inline.  Refs grid2.xml, not grid1.xml
 
 import sys
 from PyQt5.QtWidgets import QVBoxLayout, QDialog, QWidget, QPushButton, QApplication
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QColor
 
-from re import sub, search
+#from re import sub, search
+import macroSubst
 from xml.etree import ElementTree
 
 class xybutton(QPushButton):
@@ -40,50 +36,67 @@ def ErrorExit(msg, fname):
     sys.stderr.write('\n*** {} {} ***\n'.format(msg, fname))
     sys.exit(0)
 
+def macroSubst(tin, recot, recon):
+    #print 'mS: tin={}, recot={}'.format(tin,recot)
+    lup=0
+    tot = tin
+    while True:                 # Expand macro texts
+        lup+=1
+        if lup>14: sys.exit()
+        s = search(r'%\w%+', tot)
+        if s:
+            mname = tot[1+s.start():s.end()-1]
+            #print 's:', s.start(), s.end(), tot, mname, recot[mname], recon[mname]
+            if mname in recot:
+                mbody = recot[mname]
+                # Expand macro counter(s) in body of macro
+                gotCounter = False
+                while mbody.find('%#') > -1:
+                    gotCounter = True
+                    mbody = sub('%#', str(recon[mname]), mbody)
+                if gotCounter:
+                    recon[mname] += 1 # Increase counter
+                    #print 'Exp. tin={} to tot={} and cv {}-1'.format(tin, tot, recon[mname])
+                # Put expanded macro text into tin
+                tot = tot[:s.start()]+mbody+tot[s.end():]
+            else:
+                break
+        else:
+            break
+    #print ' tot: {}'.format(tot)
+    return tot
+
+
 def makeGrid(etree):
     at = ''                     # set default for at
     recot = {}
     recon = {}
-    row = 0
     for item in etree.getroot():
         if shoInput>0:
-            print (item.tag, item.attrib, len(item))
-	if item.tag == 'info':
-            for elt in item:
-                if shoInput>1:
-                    print (elt.tag,elt.items())
-                if elt.tag=='deco':
-                    pass        # future: frame/ontop/stick
-                if elt.tag=='code':
-                    for k in elt.keys():
-                        recot[k] = elt.get(k)
-                        recon[k] = 0
-        elif item.tag=='row':
-            col = 0
-            for elt in item:
-                clv = dict(elt.items())
-                for term in clv.keys():
-                    toft = clv[term] # Get text of term
-                    if toft[0]=='%':  # Is toft a macro?
-                        mname = toft[1:]     # Yes, get its name
-                        mbody = recot[mname] # Get body of macro
-                        s = mbody.find('%#')  # Is a # in macro?
-                        if s > -1:
-                            mbody = sub('%#', str(recon[mname]), mbody)
-                            recon[mname] += 1  # Increase counter
-                        clv[term] = mbody
-                if shoInput>1:
-                    print ('{} {}'.format(elt.tag, clv.items()))
+            print (item.tag, item.attrib, len(item), item.keys())
+	if item.tag == 'deco':
+            pass        # future: frame/ontop/stick
+        elif item.tag=='code':
+            for k in item.keys():
+                recot[k] = item.get(k)
+                recon[k] = 0
+        elif item.tag=='cat':
+            pass        # future:
+        elif item.tag=='elt':
+            clv = dict(item.items())
+            for term in clv.keys():
+                toft = clv[term] # Get text of term
+                clv[term] = macroSubst(toft, recot, recon)
+            if shoInput>1:
+                print ('{} {}'.format(item.tag, clv.items()))
                 # Make button with labl l, codename c, data v.
                 l = clv.get('l', '?')
-                B = xybutton(l, W, clv['c'], col, row, clv['v'])
-                col += 1
-            row += 1
+                B = xybutton(l, W, clv['i'], int(clv['c']), int(clv['r']), clv['v'])
 
 # --------------------------- main -------------------------------
 # Get params: (1) output-options number, (2) name of grid XML file
 shoInput = int(sys.argv[1]) if len(sys.argv) > 1  else 0
-gridFile = sys.argv[2]      if len(sys.argv) > 2  else './grid1.xml'
+gridFile = sys.argv[2]      if len(sys.argv) > 2  else './grid2.xml'
 
 try:                            # Read script from file and parse it
     etree = ElementTree.parse(gridFile)
