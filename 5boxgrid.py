@@ -6,7 +6,7 @@
 # file, instead of coding it inline.  Refs grid2.xml, not grid1.xml
 
 import sys
-from PyQt5.QtWidgets import QVBoxLayout, QDialog, QWidget, QPushButton, QApplication
+from PyQt5.QtWidgets import QWidget, QPushButton, QApplication, QGridLayout
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QColor
 
@@ -23,10 +23,9 @@ class xybutton(QPushButton):
         self.setObjectName(codename) # Set kind of style to use
         self.setText(labl)           # Set button's label
         self.clicked.connect(xyBcallback) # Callback handler
-        self.setMinimumSize(self.bux, self.buy)   # Button min size
         self.move(x*self.perx, y*self.pery) # Button location
         self.x, self.y, self.dat = x, y, dat
-
+                
 def xyBcallback():      # xyButton callback handler
     me = W.sender()     # ! W is a global ref to widget level above us
     nam, cat, dat, x, y = me.text(), me.objectName(), me.dat, me.x, me.y
@@ -36,10 +35,23 @@ def ErrorExit(msg, fname):
     sys.stderr.write('\n*** {} {} ***\n'.format(msg, fname))
     sys.exit(0)
 
-def makeGrid(etree):
+def formStyle(widg, name, state, props, sociate):
+    styl = widg + ('#'+name if name else '') + state + ' {'
+    for key in sociate.keys():
+        if key in props:        # Make an l:v style item
+            l = sociate[key]    # eg background-color
+            v = props[key]      # eg green
+            if l:     # Add (eg) `background-color: "Bisque";` to body
+                styl += ' {}: "{}"; '.format(sociate[key], v)
+            elif key=='vc' or key=='vp':
+                styl += v
+    return styl + ' }'
+
+def makeGrid(etree, W, L):
     at = ''                     # set default for at
     recot = {}
     recon = {}
+    styleBlob = ''              # To build style-sheet text
     for item in etree.getroot():
         if shoInput>1:
             print (item.tag, item.attrib, len(item), item.keys())
@@ -52,19 +64,40 @@ def makeGrid(etree):
                 recon[k] = int(s.expand(r'\1')) if s else 0
                 if shoInput>0:
                     print ('macro {}: {}  {}'.format(k, recot[k], recon[k]))
-        elif item.tag=='style':
-            pass        # future:
-        elif item.tag=='item':
-            clv = dict(item.items())
-            for term in clv.keys():
-                toft = clv[term] # Get text of term
-                clv[term] = macroSubst(toft, recot, recon)
+        elif item.tag=='item' or item.tag=='style':
+            props = dict(item.items())
+            for term in props.keys():
+                toft = props[term] # Get text of term
+                props[term] = macroSubst(toft, recot, recon)
             if shoInput>0:
-                print ('{} {}'.format(item.tag, clv.items()))
-            # Make button with labl l, codename c, data v.
-            l = clv.get('l', '?')
-            B = xybutton(l, W, clv['i'], int(clv['c']), int(clv['r']), clv['v'])
-
+                print ('{} {}'.format(item.tag, props.items()))
+            # Prepare associations for arbitrary and not-pressed widget styles
+            sociate = { 'tc':'color', 'bc':'background-color', 'vc':'', 'mh':'min-height', 'mw':'min-width' }
+            objCode = props.get('obj','')
+            objName = props.get('id','')
+            # Now make a button or style with given properties
+            if item.tag=='item': # Button with labl l, codename c, data v.
+                l = props.get('l', '?')
+                B = xybutton(l, W, props['i'], int(props['c']), int(props['r']), props['v'])
+                L.addWidget(B, B.y, B.x)
+            # Styles with id, tc, bc, vc, mh, mw, tp, bp, vp
+            elif objCode:    # Generate framework for arbitrary widget
+                fs = formStyle(objCode, objName, '', props, sociate)
+                styleBlob += fs
+                if shoInput>0:
+                    print ('formStyle: {}'.format(fs))
+                if shoInput>1:
+                    print ('styleBlob: {}'.format(styleBlob))
+            else: # Generate QPushButton and QPushButton:pressed frameworks
+                for state in ('', ':pressed'):
+                    fs = formStyle('QPushButton', objName, state, props, sociate)
+                    styleBlob += fs
+                    if shoInput>0:
+                        print ('formStyle: {}'.format(fs))
+                    if shoInput>1:
+                        print ('styleBlob: {}'.format(styleBlob))
+                    sociate = { 'tp':'color', 'bp':'background-color', 'vp':'' }
+    W.setStyleSheet(styleBlob)
 # --------------------------- main -------------------------------
 # Get params: (1) output-options number, (2) name of grid XML file
 shoInput = int(sys.argv[1]) if len(sys.argv) > 1  else 0
@@ -82,35 +115,12 @@ except:                         # Some unknown error
 # Build boxgrid data structure and its display window
 app = QApplication(['hey'])
 W = QWidget()
+L = QGridLayout()
+W.setLayout(L)                  # Add layout manager to window
 W.setWindowTitle('qt-color-try')
-hix, hiy = 4, 15                # !! Should get hix, hiy from XML data
-wide, high = hix*xybutton.perx, hiy*xybutton.pery
-W.setMinimumSize(wide, high)
 atx, aty = 1060, 380
 W.move(atx, aty)
-# Set main window background color etc
-W.setStyleSheet("""
-QWidget { background-color: coral;
-}
-QPushButton {
-  color: blue; font: bold 11px; padding: 1;  border: 1 solid lawngreen;
-  background-color: lawngreen;
-}
-QPushButton#cat0         { color: violet; background-color: darkgreen; }
-QPushButton#cat0:pressed { color: red;    background-color: Aquamarine; }
-
-QPushButton#cat1         { color: white;  background-color: Chocolate;}
-QPushButton#cat1:pressed { color: red;    background-color: Bisque; }
-
-QPushButton#cat2         { color: pink;   background-color: darkblue; }
-QPushButton#cat2:pressed { color: red;    background-color: cyan; }
-
-QPushButton#cat3         { color: black;  background-color: crimson; }
-QPushButton#cat3:pressed { color: black;  background-color: beige; }
-""")
-
 #W.override_background_color(Gtk.StateFlags.NORMAL, color)
-
-makeGrid(etree)         # Make a button grid, using data from XML tree
+makeGrid(etree, W, L)   # Make a button grid, using data from XML tree
 W.show()                    # Show window
 exit(app.exec_())           # run pyQt5 event loop until window closes
