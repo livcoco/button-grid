@@ -43,11 +43,11 @@ from re import sub, search
 # defined, processing input 'a@b%c' results in 'a@b%c' output.
 
 # However, @x? gets squeezed out, without regard to whether x is
-# defined.  Examples: Processing input 'a@b?c@b%d' results in 'ac@b%d'
-# output and b undefined; processing input 'Row @c@b?^' results in
-# output 'Row @c^' and b undefined.  (The left-to-right input
-# processing in use does not move back to recognize that an expandable
-# '@c^' got created.)
+# defined.  Examples: * Processing input 'a@b?c@b%d' results in
+# 'ac@b%d' output and b undefined.  * Processing input 'Row @c@b?^'
+# results in output 'Row @c^' and b undefined.  (The left-to-right
+# input processing in use does not move back to recognize that an
+# otherwise-expandable '@c^' got created.)
 
 # Note, each macro has an associated counter that is zeroed whenever
 # the macro is defined and increases when used via `@x^` within a
