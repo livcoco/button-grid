@@ -1,6 +1,16 @@
 #!/usr/bin/env python
-# Re: macro expansion methods testing
 # - jiw -  8 Sept 2018
+
+# This module defines a macro substitution method
+# `macroSubst(inputText, macroBodies, counterValues)`
+# that expands the string inputText using macro definitions from
+# macroBodies and integer counter values from counterValues, in accord with
+# expansion rules described below.  (See `Form` and `Purpose` table)
+
+# It also defines a small testing framework.  Eg, `./macroSubst.py string1`
+# runs `macroSubst(string1, recot, recon)` where recot and recon are
+# dictionaries that define a few macros and counters for testing.
+
 from re import sub, search
 
 # Macros: Let x represent a macro name formed of letters, digits, or
