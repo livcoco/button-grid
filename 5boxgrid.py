@@ -1,9 +1,30 @@
 #!/usr/bin/env python
-# Re: Make a grid of message buttons
-# - jiw -  1 Sept 2018
+# Re: Make a grid of message buttons as directed by specifications in
+# an XML file. - jiw - Sept 2018 -  Offered without warranty
+# under GPL v3 terms as at http://www.gnu.org/licenses/gpl.html
 
-# 2nd qt5 version of boxgrid; builds CSS code based on specs in XML
-# file, instead of coding it inline.  Refs grid2.xml, not grid1.xml
+# This program uses Qt5 graphics, via PyQt5.  To install it, please
+# see (eg) http://pyqt.sourceforge.net/Docs/PyQt5/installation.html
+
+# See comments in file grid2.xml regarding XML file details.
+# Generally, that file will contain `code`, `style`, and `item`
+# entries that define macros, styles, and button items to make up a
+# grid of pushbuttons.  The XML file associates row/column locations,
+# colors, and values to buttons.  When a pushbutton is clicked, this
+# program sends the button's value to a receiver.  (In current
+# version, to stdout.)
+
+# This program accepts two optional command-line parameters:
+# 1.  XML file name.     Default: ./grid2.xml
+# 2.  Printing Control.  Default: 0
+
+# Note, OR together bit values to compute a decimal Printing Control value,
+# to display results of parsing and processing the XML file:
+#  1,  Item tags and properties as input and parsed
+#  2,  'macro' elements (name, counter value, text) as processed
+#  4,  Style-sheet (style entries frameworked and concatenated)
+#  8,  Style entries as frameworked
+# 16,  'item' and 'style' properties as processed
 
 import sys
 from PyQt5.QtWidgets import QWidget, QPushButton, QApplication, QGridLayout
@@ -35,6 +56,9 @@ def ErrorExit(msg, fname):
     sys.stderr.write('\n*** {} {} ***\n'.format(msg, fname))
     sys.exit(0)
 
+def ifSho(b, s):
+    if (b & shoControl) > 0:  print s
+    
 def formStyle(widg, name, state, props, sociate):
     styl = widg + ('#'+name if name else '') + state + ' {'
     for key in sociate.keys():
@@ -45,7 +69,7 @@ def formStyle(widg, name, state, props, sociate):
                 styl += ' {}: "{}"; '.format(sociate[key], v)
             elif key=='vc' or key=='vp':
                 styl += v
-    return styl + ' }'
+    return styl + ' } '
 
 def makeGrid(etree, W, L):
     at = ''                     # set default for at
@@ -53,8 +77,7 @@ def makeGrid(etree, W, L):
     recon = {}
     styleBlob = ''              # To build style-sheet text
     for item in etree.getroot():
-        if shoInput>1:
-            print (item.tag, item.attrib, len(item), item.keys())
+        ifSho (1, 'Tag: {}  Attrib: {}  Len: {}  Keys: {}'.format(item.tag, item.attrib, len(item), item.keys()))
 	if item.tag == 'deco':
             pass        # future: frame/ontop/stick
         elif item.tag=='macro':
@@ -62,15 +85,13 @@ def makeGrid(etree, W, L):
                 recot[k] = macroSubst(item.get(k), recot, recon)
                 s = search(r' *(\d+)', recot[k])                
                 recon[k] = int(s.expand(r'\1')) if s else 0
-                if shoInput>0:
-                    print ('macro {}: {}  {}'.format(k, recot[k], recon[k]))
+                ifSho (2, 'macro {:3}: Counter {:<3}  Text {}'.format(k, recon[k], recot[k]))
         elif item.tag=='item' or item.tag=='style':
             props = dict(item.items())
             for term in props.keys():
                 toft = props[term] # Get text of term
                 props[term] = macroSubst(toft, recot, recon)
-            if shoInput>0:
-                print ('{} {}'.format(item.tag, props.items()))
+            ifSho (16, 'Tag: {:5}  Props: {}'.format(item.tag, props.items()))
             # Prepare associations for arbitrary and not-pressed widget styles
             sociate = { 'tc':'color', 'bc':'background-color', 'vc':'', 'mh':'min-height', 'mw':'min-width' }
             objCode = props.get('obj','')
@@ -84,25 +105,19 @@ def makeGrid(etree, W, L):
             elif objCode:    # Generate framework for arbitrary widget
                 fs = formStyle(objCode, objName, '', props, sociate)
                 styleBlob += fs
-                if shoInput>0:
-                    print ('formStyle: {}'.format(fs))
-                if shoInput>1:
-                    print ('styleBlob: {}'.format(styleBlob))
+                ifSho (8, 'Style: {}'.format(fs))
             else: # Generate QPushButton and QPushButton:pressed frameworks
                 for state in ('', ':pressed'):
                     fs = formStyle('QPushButton', objName, state, props, sociate)
                     styleBlob += fs
-                    if shoInput>0:
-                        print ('formStyle: {}'.format(fs))
-                    if shoInput>1:
-                        print ('styleBlob: {}'.format(styleBlob))
+                    ifSho (8, 'Style: {}'.format(fs))
                     sociate = { 'tp':'color', 'bp':'background-color', 'vp':'' }
+    ifSho (4, 'Stylesheet: {}'.format(styleBlob))
     W.setStyleSheet(styleBlob)
 # --------------------------- main -------------------------------
 # Get params: (1) output-options number, (2) name of grid XML file
-shoInput = int(sys.argv[1]) if len(sys.argv) > 1  else 0
-gridFile = sys.argv[2]      if len(sys.argv) > 2  else './grid2.xml'
-
+gridFile = sys.argv[1]        if len(sys.argv) > 1  else './grid2.xml'
+shoControl = int(sys.argv[2]) if len(sys.argv) > 2  else 0
 try:                            # Read script from file and parse it
     etree = ElementTree.parse(gridFile)
 except IOError:
@@ -120,7 +135,6 @@ W.setLayout(L)                  # Add layout manager to window
 W.setWindowTitle('qt-color-try')
 atx, aty = 1060, 380
 W.move(atx, aty)
-#W.override_background_color(Gtk.StateFlags.NORMAL, color)
-makeGrid(etree, W, L)   # Make a button grid, using data from XML tree
+makeGrid(etree, W, L)       # Make a button grid per data from XML tree
 W.show()                    # Show window
 exit(app.exec_())           # run pyQt5 event loop until window closes

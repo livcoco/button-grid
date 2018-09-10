@@ -34,10 +34,10 @@
        Example 2: <style id='way:active' obj='Qwhat' vc='font: green
        bold 20pt "New Century Schoolbook";' /> results in a style entry
        `Qwhat#way:active {font: green bold 20pt "New Century
-       Schoolbook"; }`.
+       Schoolbook"; }`.  (Eg, for fonts: Arial Helvetica New Century
+       Schoolbook New Times Roman)
   -->
-  <style id='' obj='QWidget' bc='coral'  mh='44' mw='44' vc='font: green
-       bold 40pt "New Century Schoolbook";' />
+  <style id='' obj='QWidget' bc='coral'  mh='44' mw='44' vc='font: bold 11pt "Helvetica";' />
   <style id='cat0' tc='white' tp='red'   bc='Chocolate' bp='Bisque' />
   <style id='cat1' tc='white' tp='red'   bc='darkgreen' bp='Aquamarine' />
   <style id='cat2' tc='white' tp='red'   bc='darkblue'  bp='cyan'   />
