@@ -6,11 +6,22 @@ The program 5boxgrid.py uses PyQt5 graphics to draw a grid of labeled
 buttons, with a value associated to each button.  (Re installing
 PyQt5, see http://pyqt.sourceforge.net/Docs/PyQt5/installation.html )
 
-The 5boxgrid.py program merely prints the button label, its row and
-column numbers, and its associated value when a button is clicked.
-Later versions will use client-server code.
-
-Grid layout is directed by specifications read from an XML file.  See
-comments in the file grid2.xml for details of XML content.
+Button-grid layout is directed by specifications read from an XML
+file.  See comments in the file grid2.xml for details of XML content.
 5boxgrid.py supports use of macros in the XML text.  Macro syntax and
 rules are described in comments in the module macroSubst.py.
+
+While future program versions may use client-server code to send
+button data, the current version of 5boxgrid.py (Sept 2018) just
+prints a set of button data when a button is clicked.
+                         -------------		
+File ss-font-examples.jpg is a screen-shot of seven button-grid
+instances demonstrating use of various font sizes and families.
+                         -------------
+Files 3boxgrid.py, grid1.xml, color-try.py, and style3buttonsEG.py are
+demo or test programs.  The XML in grid1.xml is an obsolete form used
+by 3boxgrid.py, a program that uses Gtk 3.0 graphics rather than Qt5
+in an unsuccessful attempt at properly-colored buttons without using
+CSS.  (5boxgrid.py uses CSS.)  color-try.py uses Qt5 calls in an
+attempt to color randomly-placed buttons.  style3buttonsEG.py
+successfully uses CSS with Qt5 to display a 3-button menu.
