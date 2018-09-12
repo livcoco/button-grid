@@ -3,8 +3,9 @@ when clicked send associated commands. - jiw - (C) Sept 2018 - Offered
 without warranty per http://www.gnu.org/licenses/gpl.html GPL v3 terms
 
 The program 5boxgrid.py uses PyQt5 graphics to draw a grid of labeled
-buttons, with a value associated to each button.  (Re installing
-PyQt5, see http://pyqt.sourceforge.net/Docs/PyQt5/installation.html )
+buttons, with a value associated to each button.  (Re installing Qt5
+and PyQt5, see https://wiki.qt.io/Install_Qt_5_on_Ubuntu and
+http://pyqt.sourceforge.net/Docs/PyQt5/installation.html )
 
 Button-grid layout is directed by specifications read from an XML
 file.  See comments in the file grid2.xml for details of XML content.

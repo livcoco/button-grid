@@ -58,15 +58,15 @@
        to send as the result when button is clicked (v=...).  Each of
        the '...'  element values indicated above must appear in
        quotes.  Each value can be a verbatim text string or can be
-       text with macro references like %x% where x is a macro name.
+       text with macro references like @x% where x is a macro name.
        
        The elements of a given <item ... /> entry may process out of
        order; don't use macros that depend on element order.
   -->
-  <!-- Define macros to gen i, l, r, c, d (id, label, row, col, data) -->
+  <!-- Define macros to gen i, l, r, c, v (id, label, row, col, datavalue) -->
   <macro rr='0'  cc='0'  co='0'  v='0'  vv='100'/>
   
-  <macro id='cat@cc^'  c='@co^'  r='0' ll='Bu' u='10' d='Val'/>  
+  <macro id='cat@cc^'  c='@co^'  r='0' ll='Bu' u='10' />  
   <item  i='@id%' l='@ll%@u^' r='@r^' c='@c%' v='@vv^' />
   <item  i='@id%' l='@ll%@u^' r='@r^' c='@c%' v='@vv^' />
   <item  i='@id%' l='@ll%@u^' r='@r^' c='@c%' v='@vv^' />
@@ -74,7 +74,7 @@
   <item  i='@id%' l='@ll%@u^' r='@r^' c='@c%' v='@vv^' />
   <item  i='@id%' l='@ll%@u^' r='@r^' c='@c%' v='@vv^' />
     
-  <macro id='cat@cc^'  c='@co^'  r='0'  ll='Vu@@x?v^'/>
+  <macro id='cat@cc^'  c='@co^'  r='0'  ll='Vu@@x?v^' />
   <item  i='@id%' l='@ll%a@u^' r='@r^' c='@c%' v='@vv^' />
   <item  i='@id%' l='@ll%b@u^' r='@r^' c='@c%' v='@vv^' />
   <item  i='@id%' l='@ll%c@u^' r='@r^' c='@c%' v='@vv^' />
@@ -82,7 +82,7 @@
   <item  i='@id%' l='@ll%e@u^' r='@r^' c='@c%' v='@vv^' />
   <item  i='@id%' l='@ll%f@u^' r='@r^' c='@c%' v='@vv^' />
   
-  <macro id='cat@cc^'  c='@co^'  r='0'  ll='Tu'  d='Wave'/>
+  <macro id='cat@cc^'  c='@co^'  r='0'  ll='Tu' />
   <item  i='@id%' l='@ll%@u^' r='@r^' c='@c%' v='@vv^' />
   <item  i='@id%' l='@ll%@u^' r='@r^' c='@c%' v='@vv^' />
   <item  i='@id%' l='@ll%@u^' r='@r^' c='@c%' v='@vv^' />
@@ -90,7 +90,7 @@
   <item  i='@id%' l='@ll%@u^' r='@r^' c='@c%' v='@vv^' />
   <item  i='@id%' l='@ll%@u^' r='@r^' c='@c%' v='@vv^' />
 
-  <macro id='cat@cc^'  c='@co^'  r='0'  ll='H#' d='Wawa' />
+  <macro id='cat@cc^'  c='@co^'  r='0'  ll='H#' />
   <item  i='@id%' l='@ll%@u^' r='@r^' c='@c%' v='@vv^' />
   <item  i='@id%' l='@ll%@u^' r='@r^' c='@c%' v='@vv^' />
   <item  i='@id%' l='@ll%@u^' r='@r^' c='@c%' v='@vv^' />
