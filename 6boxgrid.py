@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 # Re: Make a grid of message buttons as directed by specifications in
 # an XML file. - jiw - Sept 2018 -  Offered without warranty
 # under GPL v3 terms as at http://www.gnu.org/licenses/gpl.html
@@ -48,14 +48,14 @@ class xybutton(QPushButton):
 def xyBcallback():      # xyButton callback handler
     me = W.sender()     # ! W is a global ref to widget level above us
     nam, cat, dat, x, y = me.text(), me.objectName(), me.dat, me.x, me.y
-    mpClient.doOp4(nam, cat, dat, x, y)
+    mpClient.doOp4(cat, nam, dat, x, y)
 
 def ErrorExit(msg, fname):
     sys.stderr.write('\n*** {} {} ***\n'.format(msg, fname))
     sys.exit(0)
 
 def ifSho(b, s):
-    if (b & shoControl) > 0:  print s
+    if (b & shoControl) > 0:  print (s)
     
 def formStyle(widg, name, state, props, sociate):
     styl = widg + ('#'+name if name else '') + state + ' {'
@@ -76,7 +76,7 @@ def makeGrid(etree, W, L):
     styleBlob = ''              # To build style-sheet text
     for item in etree.getroot():
         ifSho (1, 'Tag: {}  Attrib: {}  Len: {}  Keys: {}'.format(item.tag, item.attrib, len(item), item.keys()))
-	if item.tag == 'deco':
+        if item.tag == 'deco':
             pass        # future: frame/ontop/stick
         elif item.tag=='macro':
             for k in item.keys():
