@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python2
 import multiprocessing
 from multiprocessing.managers import SyncManager
 
@@ -25,7 +25,7 @@ class _TestServer:
         print ('cat3', n, d, x, y); return 3
 
     def makeServerManager(self):
-        show = True
+        show = 0
         self.jobQ = multiprocessing.JoinableQueue(-1)
         self.resultQ = multiprocessing.JoinableQueue(-1)
         self.lock = multiprocessing.Lock()
@@ -43,7 +43,7 @@ class _TestServer:
         return manager
 
     def respondToClientRequest(self, methodNameAndArgs, sharedResultQ):
-        show = True
+        show = 0
         if show: print('in respondToClientRequest() with', methodNameAndArgs)
         try:
             if type(methodNameAndArgs) == self.typeString:
@@ -68,7 +68,7 @@ class TestServer(BorgTestServer, _TestServer):
         self.run()
         
     def run(self):
-        show = True
+        show = 0
         self.serverManager = self.makeServerManager()
         while True:
             if show: print('waiting for method call...')
@@ -84,7 +84,7 @@ class TestClientGeneric:
         self.lock = self.manager.get_lock()
 
     def makeClientManager(self, ipAddress, portNum, authKey):
-        show = True
+        show = 0
         class ServerQueueManager(SyncManager):
             pass
 
@@ -100,7 +100,7 @@ class TestClientGeneric:
         return manager
 
     def serverMethodCall(self, args):
-        show = True
+        show = 0
         try:
             self.lock.acquire()
             while not self.resultQ.empty():
