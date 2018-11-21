@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<frame>
+  <!-- `deco` is future feature item-->
+  <deco ontop='t' frame='t' stick='f' />
+
+  <!-- Each <style ... /> entry defines a category of buttons.
+       Various attributes can be specified, via keys as follows:
+       background color, bc; background color when pressed, bp; text
+       color and options, tc; text color and options when pressed, tp;
+       button min height, mh; button min width, mw; category name, id;
+       and verbatim text, vc and vp.  Verbatim text can be used to
+       specify style information for QPushButton properties besides
+       those covered above.
+
+       After a <style ... /> entry is parsed, cascading style sheet
+       entries are created by putting id, tc, bc, vc, mh, and mw
+       values into a QPushButton#id { ... } framework, and by putting
+       id, tp, bp, and vp values into a QPushButton#id:pressed { ... }
+       framework.
+
+       Notes: * The '#id' part is left off when id is an empty string,
+       in which case specified properties apply to all pushbuttons
+       without an overriding style.  * Unspecified properties have
+       system defaults.  * Quoted values can contain macro references,
+       described later. * For any given id, only its last-processed
+       definition has effect; if you define the same category several
+       times, only the last definition gets used.
+
+       If an `obj` value is given within a <style ...>, QPushButton
+       frameworks are not generated.  Instead, the `obj` value names
+       the framework.  Example 1: <style id='' obj='QWidget'
+       bc='coral' mh='44' mw='44' /> results in a style entry `QWidget
+       { background-color: coral; min-height:'44'; min-width:'44'; }`.
+       Example 2: <style id='way:active' obj='Qwhat' vc='font: green
+       bold 20pt "New Century Schoolbook";' /> results in a style entry
+       `Qwhat#way:active {font: green bold 20pt "New Century
+       Schoolbook"; }`.  (Eg, for fonts: Arial Helvetica New Century
+       Schoolbook New Times Roman)
+  -->
+  <style id='' obj='QWidget'   mh='44' mw='44'
+	 vc='font: bold 14pt "Helvetica"; opacity: "0";' />
+  <style id='' obj='QGridLayout' bc='transparent' />
+  <style id='cat0' tc='black' tp='black' bc='Coral'     bp='beige'  />
+  <style id='cat1' tc='white' tp='red'   bc='darkgreen' bp='Aquamarine' />
+  <style id='cat2' tc='white' tp='red'   bc='Chocolate' bp='Bisque' />
+  <style id='cat3' tc='white' tp='red'   bc='darkblue'  bp='cyan'   />
+  <style id='cat4' tc='black' tp='black' bc='Crimson'   bp='beige'  />
+
+  <!-- Macros: Each <macro ... /> entry defines one or more simple
+       text substitution macros.  Macro substitution occurs when @x%
+       (where x is a macro name) appears in a text string.  Note, each
+       macro has an associated counter that is zeroed whenever the
+       macro is defined and increases when substituted via `@x^`, but
+       not when substituted via `@x#`.  Macros can be defined or
+       redefined when needed.  For more macro details and operations,
+       please see comments within module macroSubst.py.
+  
+       Item lines: Each <item ... /> entry defines one button by
+       specifying a label (via l=...); a button category id (i=...); a
+       row number (r=...); a column number (c=...); and a data value
+       to send as the result when button is clicked (v=...).  Each of
+       the '...'  element values indicated above must appear in
+       quotes.  Each value can be a verbatim text string or can be
+       text with macro references like @x% where x is a macro name.
+       
+       The elements of a given <item ... /> entry may process out of
+       order; don't use macros that depend on element order.
+  -->
+  <!-- Define macros to gen i, l, r, c, v (id, label, row, col, datavalue) -->
+  <macro rr='0'  cc='0'  co='0'  v='0'  vv='100'/>
+  
+  <macro id='cat@cc^'  c='@co^'  r='0' ll='Tag' u='1' />  
+  <item  i='@id%' l='@u^. @ll%' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@u^. @ll%' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@u^. @ll%' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@u^. @ll%' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@u^. @ll%' r='@r^' c='@c%' v='@vv^' />
+    
+  <macro id='cat@cc^'  c='@co^'  r='0'  ll='Tag' />
+  <item  i='@id%' l='@ll%' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%' r='@r^' c='@c%' v='@vv^' />
+  
+  <macro id='cat@cc^'  c='@co^'  r='2'  ll='Tag' />
+  <item  i='@id%' l='@ll%' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%' r='@r^' c='@c%' v='@vv^' />
+  
+  <macro id='cat@cc^'  c='@co^'  r='0'  ll='Edit' />
+  <item  i='@id%' l='@ll%' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%' r='@r^' c='@c%' v='@vv^' />
+
+  <macro id='cat@cc^'  c='@co^'  r='0'  ll='Put' />
+  <item  i='@id%' l='@ll%' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%' r='@r^' c='@c%' v='@vv^' />
+  <item  i='@id%' l='@ll%' r='@r^' c='@c%' v='@vv^' />
+
+</frame>

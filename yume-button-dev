@@ -1,0 +1,32 @@
+#!/bin/bash
+# Using bash instead of sh to allow function export
+[ "$YUME" ]  || YUME=$(which yume)
+
+# Start yume with base name from latest .py file in current dir
+# If we have a param, use it as filename basis then shift it off.
+if [ $# -gt 0 ] ; 
+then BASE=${1%.} ; shift;
+else
+    BASE=`ls -t *.py |  head -1`
+fi
+BASE=${BASE%.py}
+PY=$BASE.py
+echo "Base name = $BASE"
+export BASE
+BEEP="echo -e '\a'"
+
+$YUME -at 440x330+1060+400  -de wOnTop  -bw a\
+ -bu -ex\
+     -la "Edit" "x2 $PY" \
+ -bu -la 'Edit menu' "x2 $0"\
+     -la 'Reload menu' "%+$0"\
+ -bu -la  'List all files' 'echo; date; ls -aGgl; echo'\
+     -la  'List newer files' 'echo; date; ls -aGglt --time-style="+%Y-%m-%d %T" | grep -v /| head -12; echo'\
+ -bu -la 'Param line for git add:' -la ADLINE -iv "$BASE.*"\
+ -bu -la 'Text line for git commit:' -la COLINE -iv 'Revise '\
+ -bu -la "git status" 'git status'\
+     -la "git add" 'echo;echo "Add $ADLINE at $(date)";git add $ADLINE'\
+ -bu -la "gitk" 'gitk&'\
+     -la "git commit" 'echo;date;git commit -m "$COLINE";echo'\
+
+

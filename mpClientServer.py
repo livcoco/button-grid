@@ -23,6 +23,8 @@ class _TestServer:
         print ('cat2', n, d, x, y); return 2
     def cat3(self, n, d, x, y):
         print ('cat3', n, d, x, y); return 3
+    def cat4(self, n, d, x, y):
+        print ('cat3', n, d, x, y); return 3
 
     def makeServerManager(self):
         show = 0
