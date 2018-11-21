@@ -26,7 +26,8 @@ $YUME -at 440x330+1060+400  -de wOnTop  -bw a\
  -bu -la 'Text line for git commit:' -la COLINE -iv 'Revise '\
  -bu -la "git status" 'git status'\
      -la "git add" 'echo;echo "Add $ADLINE at $(date)";git add $ADLINE'\
+ -bu -la "git commit" 'echo; date; git commit -m "$COLINE";echo'\
  -bu -la "gitk" 'gitk&'\
-     -la "git commit" 'echo;date;git commit -m "$COLINE";echo'\
+     -la "git push" 'git push'\
 
 
