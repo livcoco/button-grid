@@ -1,81 +1,62 @@
+
+Portions of mpClientServer.py are included here, with other portions
+deleted, to try for an overview of the module.
+
 #!/usr/bin/python2
 import multiprocessing
 from multiprocessing.managers import SyncManager
 
-class BorgTestServer:
+*
+class BorgTestServer:           # ????????? Does what ??????
     _sharedState = {}
-    def __init__(self):
-        self.__dict__ = self._sharedState
+    def __init__(self):  self.__dict__ = self._sharedState
 
+*
 class _TestServer:
-    def __init__(self):
-        self.typeString = type('asdf')
+    def __init__(self):  self.typeString = type('asdf')
 
+    Routines _TestServer.add, sub, mul, div; all along the same lines as add:
     def add(self, a, b):        return a + b
-    def sub(self, a, b):        return b - a
-    def mul(self, a, b):        return a * b
-    def div(self, a, b):        return b // a
+    ...
+
+    Routines _TestServer.cat0, cat1, cat2, cat3, cat4; all along the same lines as cat0:
     def cat0(self, n, d, x, y):
         print ('cat0', n, d, x, y); return 0
-    def cat1(self, n, d, x, y):
-        print ('cat1', n, d, x, y); return 1
-    def cat2(self, n, d, x, y):
-        print ('cat2', n, d, x, y); return 2
-    def cat3(self, n, d, x, y):
-        print ('cat3', n, d, x, y); return 3
-    def cat4(self, n, d, x, y):
-        print ('cat3', n, d, x, y); return 3
 
-    def makeServerManager(self):
-        show = 0
-        self.jobQ = multiprocessing.JoinableQueue(-1)
-        self.resultQ = multiprocessing.JoinableQueue(-1)
-        self.lock = multiprocessing.Lock()
-
-        class JobQueueManager(SyncManager):
-            pass
-
-        JobQueueManager.register('get_job_q', callable=lambda: self.jobQ)
-        JobQueueManager.register('get_result_q', callable=lambda: self.resultQ)
-        JobQueueManager.register('get_lock', callable=lambda: self.lock)
-        if show: print('starting manager with address =', ('', self.portNum), ', authkey', self.authKey)
+**  _TestServer.makeServerManager creates jobQ and resultQ multiprocessing.JoinableQueue
+    vars,     and lock, a multiprocessing.Lock.  Then "class JobQueueManager(SyncManager):
+    pass", declaring JobQueueManager as basically a renamed SyncManager.  Then via
+    JobQueueManager.register() calls, it registers three get-routines: get_job_q,
+    get_result_q, and get_lock to access jobQ, resultQ, and lock. Then it says:
         manager = JobQueueManager(address=('', self.portNum), authkey = self.authKey)
         manager.start()
-        print('started server manager')
         return manager
+    which creates and starts an instance of JobQueueManager.
+    Note, per <https://docs.python.org/2/library/multiprocessing.html> sec. 16.6.2.2, "Pipes
+    and Queues":  "If you use JoinableQueue then you must call JoinableQueue.task_done() for
+    each task removed from the queue or else the semaphore used to count the number of 
+    unfinished tasks may eventually overflow, raising an exception"
 
-    def respondToClientRequest(self, methodNameAndArgs, sharedResultQ):
-        show = 0
-        if show: print('in respondToClientRequest() with', methodNameAndArgs)
-        try:
-            if type(methodNameAndArgs) == self.typeString:
+**  _TestServer.respondToClientRequest(self, methodNameAndArgs, sharedResultQ) checks
+    that methodNameAndArgs) matches self.typeString and if so says,
                 self.execResult = None
                 exec('self.execResult = ' + methodNameAndArgs)
-            else:
+    but if not, says
                 methodName = methodNameAndArgs[0]
-                sharedResultQ.put(_TestServer.__dict__[methodName](self, *methodNameAndArgs[1:]) )
-        except Exception as ex:
-            print('received exception in TestServer when', methodNameAndArgs, 'executed.  returning exception', ex)
-            sharedResultQ.put(ex)
-            
-class TestServer(BorgTestServer, _TestServer):
-    portNum = 65001
-    #portNum = 8084
-    authKey = b'testMyServer'
-    def __init__(self):
-        BorgTestServer.__init__(self)
-        if self._sharedState:
-            return
-        _TestServer.__init__(self)
-        self.run()
+                sharedResultQ.put(_TestServer.__dict__[methodName](self, *methodNameAndArgs[1:]))
+    and may print an exception and add it to sharedResultQ.
+
+*
+**  Via "class TestServer(BorgTestServer, _TestServer)", TestServer inherits from both
+    BorgTestServer and _TestServer.  It inits BorgTestServer and if _sharedState does not
+    exist, inits _TestServer then invokes TestServer.run .
         
-    def run(self):
-        show = 0
-        self.serverManager = self.makeServerManager()
-        while True:
-            if show: print('waiting for method call...')
+**  TestServer.run sets its .serverManager to self.makeServerManager and then loops
+    on following:
             queueData = self.jobQ.get()
             self.respondToClientRequest(queueData, self.resultQ)
+    jobQ is an instance of a JobQueueManager JoinableQueue, ie, a
+    SyncManager JoinableQueue, 
 
 #=================================================================
 class TestClientGeneric:

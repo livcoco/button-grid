@@ -2,11 +2,6 @@
 import multiprocessing
 from multiprocessing.managers import SyncManager
 
-class BorgTestServer:
-    _sharedState = {}
-    def __init__(self):
-        self.__dict__ = self._sharedState
-
 class _TestServer:
     def __init__(self):
         self.typeString = type('asdf')
@@ -40,7 +35,11 @@ class _TestServer:
         JobQueueManager.register('get_lock', callable=lambda: self.lock)
         if show: print('starting manager with address =', ('', self.portNum), ', authkey', self.authKey)
         manager = JobQueueManager(address=('', self.portNum), authkey = self.authKey)
-        manager.start()
+        try:
+            manager.start()
+        except:
+            print 'makeServerManager .start exception', sys.exc_info()
+            raise
         print('started server manager')
         return manager
 
@@ -58,20 +57,26 @@ class _TestServer:
             print('received exception in TestServer when', methodNameAndArgs, 'executed.  returning exception', ex)
             sharedResultQ.put(ex)
             
-class TestServer(BorgTestServer, _TestServer):
+class TestServer(_TestServer):
     portNum = 65001
     #portNum = 8084
     authKey = b'testMyServer'
     def __init__(self):
-        BorgTestServer.__init__(self)
-        if self._sharedState:
-            return
-        _TestServer.__init__(self)
-        self.run()
+        try:
+            _TestServer.__init__(self)
+            self.run()
+        except:
+            print 'TestServer init exception', sys.exc_info()
+            raise
         
     def run(self):
         show = 0
-        self.serverManager = self.makeServerManager()
+        try:
+            self.serverManager = self.makeServerManager()
+        except:
+            print 'TestServer run exception', sys.exc_info()
+            raise
+        
         while True:
             if show: print('waiting for method call...')
             queueData = self.jobQ.get()
@@ -127,20 +132,26 @@ class TestClient(TestClientGeneric):
         return self.serverMethodCall((op, n, d, x, y))
             
 if __name__ == '__main__':
-    # Brief tests for client and server.  If attempt to start a client
-    # fails, start a server.  The client in this test does 13 RPCs,
+    # Brief tests for client and server.  If attempt to start a server
+    # fails, start client.  The client in this test does 13 RPCs,
     # computing Fibonacci numbers, then exits.
     import time
     import sys
     import signal
     def sigHandler(sig, frame):
         exit(0)
-    signal.signal(signal.SIGINT, sigHandler) # Make a clean exit on ctrl-c
+    signal.signal(signal.SIGINT, sigHandler) # Make a cleaner exit on ctrl-c
 
-    clientRunning = False
+    serverRunning = False
     try:
+        print 'Try to start Server'
+        server = TestServer()
+        print 'Started Server'
+        serverRunning = True    # Got it started
+    except:
+        print 'Server exception', sys.exc_info()
+    if not serverRunning:
         client = TestClient()
-        clientRunning = True    # Got a client started
         print 'Started client'
         a, b = 1,1
         for t in range(13):
@@ -149,10 +160,3 @@ if __name__ == '__main__':
             a, b = b, r         # Gen. Fibonacci numbers
             time.sleep(1)
         sys.exit(0)
-    except:
-        print 'Client exception', sys.exc_info()
-    if not clientRunning:
-        print 'Starting Server'
-        server = TestServer()
-        print 'Started Server'
-
