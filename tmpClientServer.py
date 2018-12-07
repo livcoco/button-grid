@@ -33,14 +33,14 @@ class _TestServer:
         JobQueueManager.register('get_job_q', callable=lambda: self.jobQ)
         JobQueueManager.register('get_result_q', callable=lambda: self.resultQ)
         JobQueueManager.register('get_lock', callable=lambda: self.lock)
-        if show: print('starting manager with address =', ('', self.portNum), ', authkey', self.authKey)
+        if show: print('Starting manager with address =', ('', self.portNum), ', authkey', self.authKey)
         manager = JobQueueManager(address=('', self.portNum), authkey = self.authKey)
         try:
             manager.start()
         except:
             print 'makeServerManager .start exception', sys.exc_info()
             raise
-        print('started server manager')
+        print 'Started Server / QueueManagers'
         return manager
 
     def respondToClientRequest(self, methodNameAndArgs, sharedResultQ):
@@ -122,7 +122,6 @@ class TestClient(TestClientGeneric):
         self.ipAddress = '127.0.0.1'
         self.portNum = TestServer.portNum
         self.authKey = TestServer.authKey
-        print('authKey', self.authKey)
         self.startClient(self.ipAddress, self.portNum, self.authKey)
         
     def doOp2(self, op, a, b):
@@ -132,27 +131,27 @@ class TestClient(TestClientGeneric):
         return self.serverMethodCall((op, n, d, x, y))
             
 if __name__ == '__main__':
-    # Brief tests for client and server.  If attempt to start a server
-    # fails, start client.  The client in this test does 13 RPCs,
-    # computing Fibonacci numbers, then exits.
-    import time
-    import sys
-    import signal
-    def sigHandler(sig, frame):
-        exit(0)
+    # Brief tests for client and server.  If socket seems to be
+    # available (ignoring possible races), start server; else, start
+    # client.  The client in this test does 13 RPCs, computing
+    # Fibonacci numbers, then exits.
+    import time, sys, signal, socket
+    
+    def sigHandler(sig, frame):  exit(0)
     signal.signal(signal.SIGINT, sigHandler) # Make a cleaner exit on ctrl-c
 
-    serverRunning = False
-    try:
-        print 'Try to start Server'
-        server = TestServer()
-        print 'Started Server'
-        serverRunning = True    # Got it started
-    except:
-        print 'Server exception', sys.exc_info()
+    # Test if socket is in use
+    port = 65001
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    serverRunning = sock.connect_ex(('localhost', port)) == 0
+
     if not serverRunning:
+        print 'Starting Server'
+        server = TestServer()
+    else:
+        print 'Starting Client'
         client = TestClient()
-        print 'Started client'
+        print 'Started Client'
         a, b = 1,1
         for t in range(13):
             r = client.doOp2('add', a, b)
